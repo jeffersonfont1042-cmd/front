@@ -1,11 +1,16 @@
-
-fetch('http://localhost:3000/api/mensagem')
-.then(response =>response.json())
-.then(data => {
-    const msn =document.getElementById('titulo');
-      const sub =document.getElementById('subtitulo');
-    msn.innerHTML = (data.mensagem);
-    sub.innerHTML=(data.sub)
-  console.log(data.mensagem);
-  // Resultado: 'Olá do backend com express!'
-});
+async function dados (){
+ try{
+  const res=await fetch('http://localhost:3000/api/mensagem')
+  if (!res.ok){
+   throw new Error(`erro ${res.status}`) 
+  }
+  const data = await res.json();
+  const msn =document.getElementById('titulo');
+  const sub =document.getElementById('subtitulo');
+  msn.innerHTML = (data.mensagem);
+  sub.innerHTML=(data.sub);
+ } catch (erro){
+  console.error("erro:", erro);
+ }
+}
+dados()
