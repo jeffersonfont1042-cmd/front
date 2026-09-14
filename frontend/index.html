@@ -6,9 +6,39 @@
     <title>Document</title>
 </head>
 <body>
-<h1 id="titulo"></h1>
-<h2 id="subtitulo"></h2>
-<script src="./script.js"></script>
+    <h1>Cadastro de Usuário</h1>
+    <section>
+        <h3>Novo Usuário</h3>
+        <form id="formUsuario">
+            <input type="hiden" id="usuarioID" style="display:none">
+            <div>
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Digite o nome" required>
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Digite o email" required>
+            </div>
+            <div>
+            <button type="submit" id="botaosalvar">Cadastrar</button>
+            </div>
+        </form>
+    
+    </section>
+    <section>
+        <h3>Usuários Cadastrados</h3>
+        <div id="mensagem"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>nome</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="listaUsuarios"></tbody>
+        </table>
+    </section>
+    <script src="script.js"></script>
 </body>
-
 </html>

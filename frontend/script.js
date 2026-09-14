@@ -1,16 +1,50 @@
-async function dados (){
- try{
-  const res=await fetch('http://localhost:3000/api/mensagem')
-  if (!res.ok){
-   throw new Error(`erro ${res.status}`) 
-  }
-  const data = await res.json();
-  const msn =document.getElementById('titulo');
-  const sub =document.getElementById('subtitulo');
-  msn.innerHTML = (data.mensagem);
-  sub.innerHTML=(data.sub);
- } catch (erro){
-  console.error("erro:", erro);
- }
-}
-dados()
+const API_URL = 'http://localhost:3000/api/usuarios';
+
+const listaUsuarios = document.getElementById('listaUsuarios');
+
+const form = document.getElementById('formUsuario');
+const nomeInput = document.getElementById('nome');
+const emaiInput = document.getElementById('email');
+const botaoSalvar = document.getElementById('botaoSalvar');
+
+async function carregarUsuarios() {
+        try { 
+            const resposta = await fetch(API_URL);
+            if (!resposta.ok) {
+                throw new Error(`Erro HTTP: ${resposta.status}`);
+            }
+           const data = await resposta.json();
+
+           listaUsuarios.innerHTML = "";
+
+           data.forEach(usuario => {
+            const linha = document.createElement("tr");
+
+            linha.innerHTML = `<td>${usuario.id}</td><td>${usuario.nome}</td><td>${usuario.email}</td>`;
+
+            listaUsuarios.appendChild(linha);
+           })
+        }
+            catch (erro) { 
+                console.error('Error: ', erro);
+            }
+    };
+    form.addEventListener("submit",async (evento) => { //inicia a leitura do botão salvar
+evento.preventDefault(); //não deixa a pagina atualizar
+const nome=nomeInput.value;
+const email=emaiInput.value;
+const usuario = {
+nome,
+email 
+};
+await fetch(API_URL, {
+method:"POST",
+headers:{
+"Content-Type":"application/json"    
+},
+body:JSON.stringify(usuario)    
+});
+   carregarUsuarios();
+    });
+    //Inicia já com nossa listagem
+    carregarUsuarios();
