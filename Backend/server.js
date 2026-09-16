@@ -20,9 +20,15 @@ function salvarUsuarios(usuarios){
 
 }
 
-
+app.get('/api/usuarios/:id', (req, res) => {
+    const usuarios = leituraUsuarios();
+    res.json(usuarios);
+});
+//GET: Por ID
 app.get('/api/usuarios', (req, res) => {
     const usuarios = leituraUsuarios();
+    const id= Number(req.params.id);
+    const usuario = usuarios.find(usuario=>usuario.id === id);
     res.json(usuarios);
 });
 
@@ -46,7 +52,24 @@ app.post('/api/usuarios', (req, res) => {
     salvarUsuarios(usuarios); //salvamos o usuário no arquivo
 
     res.status(201).json(novoUsuario); //retorna sucesso ao criar novo usuário
-})
+});
+//PUT:editar
+app.put('/api/usuarios/:id',(req,res)=>{
+const {nome,email}=req.body; //pega a informação do corpo da requisição
+const usuarios=leituraUsuarios(); //função leitura já criada
+const id=Number(req.params.id); //estamos trabalhando com parametros
+
+const usuario =usuarios.find(usuario=>usuario.id ===id);
+//find vai procurar na função se usuario id é igual em tipo 
+//e valor do id passado pelo front
+usuario.nome =nome;
+usuario.email=email;
+
+salvarUsuarios(usuarios);
+
+res.json(usuario);
+}
+)
 
 app.listen(PORT, () => {
     console.log(`Servidor atualizado em http://localhost:${PORT}`);
