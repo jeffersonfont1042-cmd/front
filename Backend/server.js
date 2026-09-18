@@ -20,16 +20,16 @@ function salvarUsuarios(usuarios){
 
 }
 
-app.get('/api/usuarios/:id', (req, res) => {
+app.get('/api/usuarios', (req, res) => {
     const usuarios = leituraUsuarios();
     res.json(usuarios);
 });
 //GET: Por ID
-app.get('/api/usuarios', (req, res) => {
+app.get('/api/usuarios/:id', (req, res) => {
     const usuarios = leituraUsuarios();
     const id= Number(req.params.id);
-    const usuario = usuarios.find(usuario=>usuario.id === id);
-    res.json(usuarios);
+    const usuario = usuarios.find(usuario=> usuario.id === id);
+    res.json(usuario);
 });
 
 //POST:Criar
@@ -54,23 +54,36 @@ app.post('/api/usuarios', (req, res) => {
     res.status(201).json(novoUsuario); //retorna sucesso ao criar novo usuário
 });
 //PUT:editar
-app.put('/api/usuarios/:id',(req,res)=>{
-const {nome,email}=req.body; //pega a informação do corpo da requisição
-const usuarios=leituraUsuarios(); //função leitura já criada
-const id=Number(req.params.id); //estamos trabalhando com parametros
+app.put('/api/usuarios/:id', (req,res)=> {
+const {nome, email}= req.body; //pega a informação do corpo da requisição
+const usuarios= leituraUsuarios(); //função leitura já criada
+const id= Number(req.params.id); //estamos trabalhando com parametros
 
-const usuario =usuarios.find(usuario=>usuario.id ===id);
+const usuario =usuarios.find(usuario => usuario.id ===id);
 //find vai procurar na função se usuario id é igual em tipo 
 //e valor do id passado pelo front
-usuario.nome =nome;
-usuario.email=email;
+usuario.nome = nome;
+usuario.email = email;
 
 salvarUsuarios(usuarios);
 
 res.json(usuario);
 }
 )
+//Delete - Excluir
+app.delete("/api/usuarios/:id", (req, res) => {
+let usuarios = leituraUsuarios();
+const id = Number(req.params.id);
 
+const usuarioExiste = usuarios.some(usuario => usuario.id === id);
+if (!usuarioExiste){
+    return res.status(404).json({mensagem:"Usuário não existe"});
+}
+usuarios = usuarios.filter(usuario => usuario.id !== id);//pega a lista de todos os usuários diferentes do selecionado
+salvarUsuarios(usuarios);
+res.status(204).send();
+
+})
 app.listen(PORT, () => {
     console.log(`Servidor atualizado em http://localhost:${PORT}`);
 });

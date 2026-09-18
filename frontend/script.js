@@ -7,6 +7,7 @@ const UsuarioIdInput =document.getElementById('usuarioID')
 const nomeInput = document.getElementById('nome');
 const emaiInput = document.getElementById('email');
 const botaoSalvar = document.getElementById('botaoSalvar');
+const mensagem = document.getElementById("mensagem")
 
 async function carregarUsuarios() {
         try { 
@@ -68,13 +69,29 @@ form.addEventListener("submit",async (evento) => { //inicia a leitura do botão 
 
 
         async function editarUsuario(id) {
-        const respota = await fetch(`${API_URL}/${id}`);
+        const resposta = await fetch(`${API_URL}/${id}`);
         const usuario=await resposta.json();
 UsuarioIdInput.value=usuario.id;
 nomeInput.value=usuario.nome;
 emaiInput.value=usuario.email;
 botaoSalvar.innerHTML="Salvar alterações";
 };
+async function excluirUsuario (id) {
+ const confirmar = confirm("Deseja excluir mesmo este usuário?");
+ if (!confirmar){
+  return;  
+ }
+ await fetch(`${API_URL}/${id}`, {
+ method: "DELETE"   
+});
+mostrarMensagem("Usuário excluído com sucesso!")
+carregarUsuarios();
+}
+
+function mostrarMensagem(texto){
+mensagem.innerHTML = `${texto}`;
+setTimeout(() => {mensagem.innerHTML= ""},3000);
+}
 
     //Inicia já com nossa listagem
     carregarUsuarios();
