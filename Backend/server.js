@@ -44,7 +44,12 @@ app.post('/api/usuarios', (req, res) => {
     }
 
     const usuarios = leituraUsuarios(); //fazemos a leitura dos usuários para a memória
-
+    const emailExiste = usuarios.some(usuario =>usuario.email === emailExiste);
+    //ou normalização
+   const emailNormalizado = emailtrim().toLowerCase(); 
+    if (emailExiste){
+    return res.status(409).json({mensagem:"email ja cadastrado"});   
+}
     const novoUsuario = {id:Date.now(), nome, email}; //fazemos os objetos do novo usuário
 
     usuarios.push(novoUsuario); //adicionamos ao final da lista de usuários
